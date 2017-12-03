@@ -1,6 +1,8 @@
 #ifndef RIGIDBODYSYSTEMSIMULATOR_h
 #define RIGIDBODYSYSTEMSIMULATOR_h
+
 #include "Simulator.h"
+#include "Util\quaternion.h"
 //add your header for your rigid body system, for e.g.,
 //#include "rigidBodySystem.h" 
 
