@@ -3,6 +3,7 @@
 
 #include "Simulator.h"
 #include "Util\quaternion.h"
+#include "RigidBodySystem.h"
 //add your header for your rigid body system, for e.g.,
 //#include "rigidBodySystem.h" 
 
@@ -12,7 +13,7 @@ class RigidBodySystemSimulator:public Simulator{
 public:
 	// Construtors
 	RigidBodySystemSimulator();
-	
+	~RigidBodySystemSimulator();
 	// Functions
 	const char * getTestCasesStr();
 	void initUI(DrawingUtilitiesClass * DUC);
@@ -37,7 +38,7 @@ public:
 private:
 	// Attributes
 	// add your RigidBodySystem data members, for e.g.,
-	// RigidBodySystem * m_pRigidBodySystem; 
+	RigidBodySystem * m_pRigidBodySystem; 
 	Vec3 m_externalForce;
 
 	// UI Attributes

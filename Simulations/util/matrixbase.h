@@ -189,7 +189,7 @@ inline matrix4x4<Scalar>::matrix4x4(DirectX::XMMATRIX &m )
 {
 	for(int i =0;i<4;i++)
 	{
-		value[i][0] = XMVectorGetX(m.r[i]); value[i][1] = XMVectorGetY(m.r[i]); value[i][2] = XMVectorGetZ(m.r[i]); value[i][3] = XMVectorGetW(m.r[i]);
+		value[i][0] = DirectX::XMVectorGetX(m.r[i]); value[i][1] = DirectX::XMVectorGetY(m.r[i]); value[i][2] = DirectX::XMVectorGetZ(m.r[i]); value[i][3] = DirectX::XMVectorGetW(m.r[i]);
 	}
 }
 
@@ -771,7 +771,7 @@ template<class Scalar>
 inline DirectX::XMMATRIX
 matrix4x4<Scalar>::toDirectXMatrix()
 {
-	XMMATRIX m = XMMatrixSet(this->value[0][0],this->value[0][1],this->value[0][2],this->value[0][3],
+	DirectX::XMMATRIX m = DirectX::XMMatrixSet(this->value[0][0],this->value[0][1],this->value[0][2],this->value[0][3],
 							 this->value[1][0],this->value[1][1],this->value[1][2],this->value[1][3],
 							 this->value[2][0],this->value[2][1],this->value[2][2],this->value[2][3],
 							 this->value[3][0],this->value[3][1],this->value[3][2],this->value[3][3]);

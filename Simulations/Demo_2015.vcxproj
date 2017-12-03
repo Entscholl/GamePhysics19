@@ -227,6 +227,7 @@
     <ClCompile Include="masspoint.cpp" />
     <ClCompile Include="massspringsystem.cpp" />
     <ClCompile Include="MassSpringSystemSimulator.cpp" />
+    <ClCompile Include="RigidBodySystem.cpp" />
     <ClCompile Include="RigidBodySystemSimulator.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="TemplateSimulator.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="masspoint.h" />
     <ClInclude Include="massspringsystem.h" />
     <ClInclude Include="MassSpringSystemSimulator.h" />
+    <ClInclude Include="RigidBodySystem.h" />
     <ClInclude Include="RigidBodySystemSimulator.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="Spring.h" />
