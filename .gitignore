@@ -1,0 +1,15 @@
+*.db
+*.opendb
+*.dll
+*.fxo
+*.lib
+*.pdb
+*.exe
+*.ilk
+*.pdb
+*.obj
+*.idb
+*.log
+*.tlog
+*.lastbuildstate
+*.pch
