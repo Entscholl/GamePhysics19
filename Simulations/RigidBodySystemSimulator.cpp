@@ -81,7 +81,7 @@ void RigidBodySystemSimulator::externalForcesCalculations(float timeElapsed)
 	Vec3 gravity = Vec3(0, -9.81f, 0);
 	m_externalForce = pullforce;
 	int closest = 0;
-	float length = 1000000000000000000000000.0f;
+	float length = FLT_MAX;
 	for (int i = 0; i < getNumberOfRigidBodies(); i++) {
 		if (sqrt(getPositionOfRigidBody(i).squaredDistanceTo(Vec3(m_trackmouse.x, m_trackmouse.y, 0))) < length) {
 			closest = i;
