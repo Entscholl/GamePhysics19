@@ -38,13 +38,15 @@ void RigidBodySystem::simulateTimestep(float timeStep)
 		m_Bodies[i].pos += (timeStep*m_Bodies[i].lin);
 		m_Bodies[i].lin += timeStep*(m_Bodies[i].force / m_Bodies[i].mass);
 		m_Bodies[i].force = { 0,0,0 };
-		m_Bodies[i].or += timeStep / 2 * Quat(0, m_Bodies[i].ang.x, m_Bodies[i].ang.y, m_Bodies[i].ang.z) * m_Bodies[i].or;
+		m_Bodies[i].or += timeStep / 2.0 * Quat(0, m_Bodies[i].ang.x, m_Bodies[i].ang.y, m_Bodies[i].ang.z) * m_Bodies[i].or;
+		m_Bodies[i].or = m_Bodies[i].or.unit();
 		m_Bodies[i].L += timeStep*m_Bodies[i].torque;
-		m_Bodies[i].torque = { 0,0,0 };
+		//m_Bodies[i].torque = { 0,0,0 };
 		Mat4d rotation = m_Bodies[i].or.getRotMat(), transpose = rotation;
 		transpose.transpose();
-		m_Bodies[i].Iinv = rotation* m_Bodies[i].IbodyInv * transpose;
-		m_Bodies[i].ang = m_Bodies[i].Iinv*m_Bodies[i].L;
+		m_Bodies[i].Iinv = rotation* m_Bodies[i].IbodyInv * transpose ;
+		
+		m_Bodies[i].ang = m_Bodies[i].Iinv.transformVector(m_Bodies[i].L);
 	}
 }
 
@@ -82,10 +84,12 @@ void RigidBodySystem::addRigidBody(Vec3 position, Vec3 size, int mass)
 	body.lin = { 0,0,0 };
 	body. or = { 0,0,0,0 };
 	body.L = { 0,0,0 };
+	body.size = size;
 	body.IbodyInv.initId();
 	body.IbodyInv.value[0][0] = 1.0 / 12.0*mass*(size.z*size.z + size.y*size.y);
 	body.IbodyInv.value[1][1] = 1.0 / 12.0*mass*(size.x*size.x + size.y*size.y);
 	body.IbodyInv.value[2][2] = 1.0 / 12.0*mass*(size.x*size.x + size.z*size.z);
+	body.IbodyInv.value[3][3] = 1.0;
 	body.IbodyInv = body.IbodyInv.inverse();
 	m_Bodies.push_back(RigidBody(body));
 }
@@ -98,4 +102,13 @@ void RigidBodySystem::setOrientationOf(int i, Quat orientation)
 void RigidBodySystem::setVelocityOf(int i, Vec3 velocity)
 {
 	m_Bodies[i].lin = velocity;
+}
+Vec3 RigidBodySystem::getSizeOfRigidBody(int i)
+{
+	return m_Bodies[i].size;
+}
+
+Quat RigidBodySystem::getOrientation(int i)
+{
+	return m_Bodies[i]. or ;
 }

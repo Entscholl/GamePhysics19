@@ -39,6 +39,20 @@ void RigidBodySystemSimulator::reset()
 
 void RigidBodySystemSimulator::drawFrame(ID3D11DeviceContext * pd3dImmediateContext)
 {
+	DUC->setUpLighting(Vec3(0, 0, 0), 0.4*Vec3(1, 1, 1), 2000.0, Vec3(0.5, 0.5, 0.5));
+	for (int i = 0; i < m_pRigidBodySystem->getNumberOfRigidBodies(); i++) {
+		//PositionMatrix
+		GamePhysics::Mat4* pos = new Mat4();
+		pos->initTranslation(m_pRigidBodySystem->getPositionOfRigidBody(i).x, m_pRigidBodySystem->getPositionOfRigidBody(i).y, m_pRigidBodySystem->getPositionOfRigidBody(i).z);
+		//Scalematrix
+		GamePhysics::Mat4* scale = new Mat4();
+		scale->initScaling(m_pRigidBodySystem->getSizeOfRigidBody(i).x, m_pRigidBodySystem->getSizeOfRigidBody(i).y, m_pRigidBodySystem->getSizeOfRigidBody(i).z);
+		//Rotationmatrix
+		GamePhysics::Mat4 rot = m_pRigidBodySystem->getOrientation(i).getRotMat();
+		DUC->drawRigidBody(*scale * rot * *pos);
+		delete pos;
+		delete scale;
+	}
 }
 
 void RigidBodySystemSimulator::notifyCaseChanged(int testCase)

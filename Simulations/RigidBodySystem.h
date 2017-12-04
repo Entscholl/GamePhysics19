@@ -1,5 +1,6 @@
 #pragma once
 #include "util\quaternion.h"
+#include "util\matrixbase.h"
 #include <vector>
 using namespace GamePhysics;
 class RigidBodySystem
@@ -16,6 +17,7 @@ public:
 		Mat4d IbodyInv;
 		Mat4d Iinv;
 		Vec3 force;
+		Vec3 size;
 	};
 	RigidBodySystem();
 	~RigidBodySystem();
@@ -29,6 +31,8 @@ public:
 	void addRigidBody(Vec3 position, Vec3 size, int mass);
 	void setOrientationOf(int i, Quat orientation);
 	void setVelocityOf(int i, Vec3 velocity);
+	Vec3 getSizeOfRigidBody(int i);
+	Quat getOrientation(int i);
 private:
 	std::vector<RigidBody> m_Bodies;
 };
