@@ -20,7 +20,7 @@ public:
 	RigidBodySystem();
 	~RigidBodySystem();
 	void SceneSetup(int flag);
-	void simulateTimestep(float timeStep, Vec3 externalForce);
+	void simulateTimestep(float timeStep);
 	int getNumberOfRigidBodies();
 	Vec3 getPositionOfRigidBody(int i);
 	Vec3 getLinearVelocityOfRigidBody(int i);

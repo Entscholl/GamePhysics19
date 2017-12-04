@@ -19,9 +19,10 @@ void RigidBodySystem::SceneSetup(int flag)
 		addRigidBody(Vec3(0,0,0),Vec3(1,0.6,0.5),2);
 		setOrientationOf(0, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
 		applyForceOnBody(0, Vec3(0.3, 0.5, 0.25), Vec3(1, 1, 0));
-		simulateTimestep(2, { 0,0,0 });
+		simulateTimestep(2);
 		Vec3 vel = getLinearVelocityOfRigidBody(0), ang = getAngularVelocityOfRigidBody(0);
 		Vec3 point = {0.3,0.5,0.25};
+		point -= getPositionOfRigidBody(0);
 		point = vel + cross(ang,point );
 		printf("linear: (%f,%f,%f), angular: (%f,%f,%f), world_space_vel: (%f,%f,%f)\n",vel.x,vel.y,vel.z,ang.x,ang.y,ang.z,point.x,point.y,point.z);
 	}
@@ -31,17 +32,19 @@ void RigidBodySystem::SceneSetup(int flag)
 	}
 }
 
-void RigidBodySystem::simulateTimestep(float timeStep, Vec3 externalForce)
+void RigidBodySystem::simulateTimestep(float timeStep)
 {
-	for (auto value : m_Bodies) {
-		value.pos += (timeStep*value.lin);
-		value.lin += timeStep*(externalForce / value.mass);
-		value.or += timeStep / 2 * Quat(0, value.ang.x, value.ang.y, value.ang.z) * value.or;
-		value.L += timeStep*value.torque;
-		Mat4d rotation = value.or.getRotMat(), transpose = rotation;
+	for (int i = 0; i < m_Bodies.size(); i++) {
+		m_Bodies[i].pos += (timeStep*m_Bodies[i].lin);
+		m_Bodies[i].lin += timeStep*(m_Bodies[i].force / m_Bodies[i].mass);
+		m_Bodies[i].force = { 0,0,0 };
+		m_Bodies[i].or += timeStep / 2 * Quat(0, m_Bodies[i].ang.x, m_Bodies[i].ang.y, m_Bodies[i].ang.z) * m_Bodies[i].or;
+		m_Bodies[i].L += timeStep*m_Bodies[i].torque;
+		m_Bodies[i].torque = { 0,0,0 };
+		Mat4d rotation = m_Bodies[i].or.getRotMat(), transpose = rotation;
 		transpose.transpose();
-		value.Iinv = rotation* value.IbodyInv * transpose;
-		value.ang = value.Iinv*value.L;
+		m_Bodies[i].Iinv = rotation* m_Bodies[i].IbodyInv * transpose;
+		m_Bodies[i].ang = m_Bodies[i].Iinv*m_Bodies[i].L;
 	}
 }
 
