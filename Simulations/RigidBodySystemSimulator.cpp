@@ -80,6 +80,15 @@ void RigidBodySystemSimulator::externalForcesCalculations(float timeElapsed)
 	// Gravity
 	Vec3 gravity = Vec3(0, -9.81f, 0);
 	m_externalForce = pullforce;
+	int closest = 0;
+	float length = 1000000000000000000000000.0f;
+	for (int i = 0; i < getNumberOfRigidBodies(); i++) {
+		if (sqrt(getPositionOfRigidBody(i).squaredDistanceTo(Vec3(m_trackmouse.x, m_trackmouse.y, 0))) < length) {
+			closest = i;
+			length = sqrt(getPositionOfRigidBody(i).squaredDistanceTo(Vec3(m_trackmouse.x, m_trackmouse.y, 0)));
+		}
+	}
+	m_pRigidBodySystem->applyForceOnBody(closest, Vec3(m_trackmouse.x, m_trackmouse.y, getPositionOfRigidBody(closest).z), m_externalForce);
 }
 
 void RigidBodySystemSimulator::simulateTimestep(float timeStep)

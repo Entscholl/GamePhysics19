@@ -23,6 +23,8 @@ public:
 	RigidBodySystem();
 	~RigidBodySystem();
 	void SceneSetup(int flag);
+	void deleteAll();
+	void resolveCollision();
 	void simulateTimestep(float timeStep);
 	int getNumberOfRigidBodies();
 	Vec3 getPositionOfRigidBody(int i);

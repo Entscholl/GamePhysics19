@@ -78,6 +78,7 @@ void MassSpringSystemSimulator::externalForcesCalculations(float timeElapsed){
 	// Gravity
 	Vec3 gravity = Vec3(0, -9.81f, 0);
 	m_externalForce = gravity + pullforce;
+
 }
 
 void MassSpringSystemSimulator::simulateTimestep(float timeStep)

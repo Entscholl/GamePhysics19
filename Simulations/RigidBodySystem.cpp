@@ -16,58 +16,70 @@ void RigidBodySystem::SceneSetup(int flag)
 	switch (flag) {
 	case 0:
 	{
-		addRigidBody(Vec3(0,0,0),Vec3(1,0.6,0.5),2);
-		setOrientationOf(0, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
-		applyForceOnBody(0, Vec3(0.3, 0.5, 0.25), Vec3(1, 1, 0));
-		simulateTimestep(2);
-		Vec3 vel = getLinearVelocityOfRigidBody(0), ang = getAngularVelocityOfRigidBody(0);
-		Vec3 point = {0.3,0.5,0.25};
-		point -= getPositionOfRigidBody(0);
-		point = vel + cross(ang,point );
-		printf("linear: (%f,%f,%f), angular: (%f,%f,%f), world_space_vel: (%f,%f,%f)\n",vel.x,vel.y,vel.z,ang.x,ang.y,ang.z,point.x,point.y,point.z);
-		
-		addRigidBody(Vec3(1, 0, 0), Vec3(1, 0.6, 0.5), 2);
-		setOrientationOf(1, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
-	}
-	break;
-	case 1:
-	{
+		deleteAll();
 		addRigidBody(Vec3(0, 0, 0), Vec3(1, 0.6, 0.5), 2);
-		setOrientationOf(0, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
-		applyForceOnBody(0, Vec3(0.3, 0.5, 0.25), Vec3(1, 0, 0));
+		setOrientationOf(0, Quat(Vec3(0.0f, 0.5f, 1.0f), (float)(M_PI)*0.25f));
+		applyForceOnBody(0, Vec3(0.3, 0.5, 0.25), Vec3(1, 1, 0));
 		simulateTimestep(2);
 		Vec3 vel = getLinearVelocityOfRigidBody(0), ang = getAngularVelocityOfRigidBody(0);
 		Vec3 point = { 0.3,0.5,0.25 };
 		point -= getPositionOfRigidBody(0);
 		point = vel + cross(ang, point);
 		printf("linear: (%f,%f,%f), angular: (%f,%f,%f), world_space_vel: (%f,%f,%f)\n", vel.x, vel.y, vel.z, ang.x, ang.y, ang.z, point.x, point.y, point.z);
-
-		addRigidBody(Vec3(1, 0, 0), Vec3(1, 0.6, 0.5), 2);
+		deleteAll();
+	}
+	break;
+	case 1:
+	{
+		deleteAll();
+		addRigidBody(Vec3(0, 0, 0), Vec3(1, 0.6, 0.5), 2);
+		setOrientationOf(0, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
+		applyForceOnBody(0, Vec3(0.3, 0.5, 0.25), Vec3(1, 0, 0));
+		simulateTimestep(2);
+	}
+	break;
+	case 2:
+	{
+		deleteAll();
+		addRigidBody(Vec3(0, 0, 0), Vec3(1, 0.6, 0.5), 2);
+		setOrientationOf(0, Quat(Vec3(0.0f, 0.5f, 1.0f), (float)(M_PI)*0.3f));
+		applyForceOnBody(0, Vec3(0, 0, 0), Vec3(1, 0, 0));
+		addRigidBody(Vec3(3, 0, 0), Vec3(1, 0.6, 0.5), 2);
 		setOrientationOf(1, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
-		//applyForceOnBody(1, Vec3(1,0,0), Vec3(-1, 0, 0)); 
+		simulateTimestep(2);
+	}
+	break;
+	case 3:
+	{
+		deleteAll();
+		addRigidBody(Vec3(-2, -2, 0), Vec3(1, 1, 1), 2);
+		setOrientationOf(0, Quat(Vec3(0.0f, 0.5f, 1.0f), (float)(M_PI)*0.25f));
+		applyForceOnBody(0, Vec3(-2, -2, 0), Vec3(-1, -1, 0));
+
+		addRigidBody(Vec3(2, -2, 0), Vec3(1, 1, 1), 2);
+		setOrientationOf(1, Quat(Vec3(0.0f, 0.5f, 1.0f), (float)(M_PI)*0.75f));
+		applyForceOnBody(1, Vec3(-2, -2, 0), Vec3(1, -1, 0));
+
+		addRigidBody(Vec3(-2, 2, 0), Vec3(1, 1, 1), 2);
+		setOrientationOf(2, Quat(Vec3(0.0f, 0.5f, 1.0f), (float)(M_PI)*0.75f));
+		applyForceOnBody(2, Vec3(-2, -2, 0), Vec3(-1, 1, 0));
+
+		addRigidBody(Vec3(2, 2, 0), Vec3(1, 1, 1), 2);
+		setOrientationOf(3, Quat(Vec3(0.0f, 0.5f, 1.0f), (float)(M_PI)*0.25f));
+		applyForceOnBody(3, Vec3(-2, -2, 0), Vec3(1, 1, 0));
+
+		simulateTimestep(2);
 	}
 	break;
 	default:
 		break;
 	}
 }
-
-void RigidBodySystem::simulateTimestep(float timeStep)
+void RigidBodySystem::deleteAll()
 {
-	for (int i = 0; i < m_Bodies.size(); i++) {
-		m_Bodies[i].pos += (timeStep*m_Bodies[i].lin);
-		m_Bodies[i].lin += timeStep*(m_Bodies[i].force / m_Bodies[i].mass);
-		m_Bodies[i].force = { 0,0,0 };
-		m_Bodies[i].or += timeStep / 2.0 * Quat(0, m_Bodies[i].ang.x, m_Bodies[i].ang.y, m_Bodies[i].ang.z) * m_Bodies[i].or;
-		m_Bodies[i].or = m_Bodies[i].or.unit();
-		m_Bodies[i].L += timeStep*m_Bodies[i].torque;
-		m_Bodies[i].torque = { 0,0,0 };
-		Mat4d rotation = m_Bodies[i].or.getRotMat(), transpose = rotation;
-		transpose.transpose();
-		m_Bodies[i].Iinv = rotation* m_Bodies[i].IbodyInv * transpose ;
-		
-		m_Bodies[i].ang = m_Bodies[i].Iinv.transformVector(m_Bodies[i].L);
-	}
+	m_Bodies.clear();
+}
+void RigidBodySystem::resolveCollision() {
 	for (int i = 0; i < getNumberOfRigidBodies(); i++) {
 		//PositionMatrix
 		GamePhysics::Mat4 pos;
@@ -88,21 +100,42 @@ void RigidBodySystem::simulateTimestep(float timeStep)
 			GamePhysics::Mat4 endTwo = scale * rot * pos;
 			CollisionInfo info = checkCollisionSAT(endOne, endTwo);
 			if (info.isValid) {
-				Real c = 1.0;
-				Vec3 vrel = m_Bodies[i].lin-m_Bodies[j].lin;
-				Vec3 normal = -info.normalWorld;
-				Real J = -(1.0 + c)*dot(vrel, normal)/( 1.0/m_Bodies[i].mass + 1.0 / m_Bodies[j].mass + dot(
-					cross(m_Bodies[i].Iinv.transformVector(cross(m_Bodies[i].pos, normal)), m_Bodies[i].pos) +
-					cross(m_Bodies[j].Iinv.transformVector(cross(m_Bodies[j].pos, normal)), m_Bodies[j].pos),
-					normal));
-				m_Bodies[i].lin += J * normal * (1.0/ m_Bodies[i].mass);
-				m_Bodies[j].lin -= J * normal * (1.0 / m_Bodies[j].mass);
-				
-				m_Bodies[i].L += cross(m_Bodies[i].pos,J*normal);
-				m_Bodies[j].L -= cross(m_Bodies[j].pos, J*normal);
+				Vec3 vrel = m_Bodies[i].lin - m_Bodies[j].lin;
+				Vec3 normal = info.normalWorld;
+				if (dot(vrel, normal) <= 0) {
+					Real c = 0.0;
+					Real J = -(1.0 + c)*dot(normal,  vrel) / (1.0 / m_Bodies[i].mass + 1.0 / m_Bodies[j].mass + dot(
+						cross(m_Bodies[i].Iinv.transformVector(cross(m_Bodies[i].pos, normal)), m_Bodies[i].pos) +
+						cross(m_Bodies[j].Iinv.transformVector(cross(m_Bodies[j].pos, normal)), m_Bodies[j].pos),
+						normal));
+					m_Bodies[i].lin += J * normal * (1.0 / m_Bodies[i].mass);
+					m_Bodies[j].lin -= J * normal * (1.0 / m_Bodies[j].mass);
+
+					m_Bodies[i].L += cross(m_Bodies[i].pos, J*normal);
+					m_Bodies[j].L -= cross(m_Bodies[j].pos, J*normal);
+				}
 			}
 		}
 	}
+}
+void RigidBodySystem::simulateTimestep(float timeStep)
+{
+	resolveCollision();
+	for (int i = 0; i < m_Bodies.size(); i++) {
+		m_Bodies[i].pos += (timeStep*m_Bodies[i].lin);
+		m_Bodies[i].lin += timeStep*(m_Bodies[i].force / m_Bodies[i].mass);
+		m_Bodies[i].force = { 0,0,0 };
+		m_Bodies[i].or += timeStep / 2.0 * Quat(0, m_Bodies[i].ang.x, m_Bodies[i].ang.y, m_Bodies[i].ang.z) * m_Bodies[i].or;
+		m_Bodies[i].or = m_Bodies[i].or.unit();
+		m_Bodies[i].L += timeStep*m_Bodies[i].torque;
+		m_Bodies[i].torque = { 0,0,0 };
+		Mat4d rotation = m_Bodies[i].or.getRotMat(), transpose = rotation;
+		transpose.transpose();
+		m_Bodies[i].Iinv = rotation* m_Bodies[i].IbodyInv * transpose ;
+		
+		m_Bodies[i].ang = m_Bodies[i].Iinv.transformVector(m_Bodies[i].L);
+	}
+	
 }
 
 int RigidBodySystem::getNumberOfRigidBodies()
@@ -112,23 +145,37 @@ int RigidBodySystem::getNumberOfRigidBodies()
 
 Vec3 RigidBodySystem::getPositionOfRigidBody(int i)
 {
-	return m_Bodies[i].pos;
+	if (m_Bodies.size() > i) {
+		return m_Bodies[i].pos;
+	}
+	else
+		return Vec3(0, 0, 0);
 }
 
 Vec3 RigidBodySystem::getLinearVelocityOfRigidBody(int i)
 {
-	return m_Bodies[i].lin;
+	if (m_Bodies.size() > i) {
+		return m_Bodies[i].lin;
+	}
+	else
+		return Vec3(0, 0, 0);
 }
 
 Vec3 RigidBodySystem::getAngularVelocityOfRigidBody(int i)
 {
-	return m_Bodies[i].ang;
+	if (m_Bodies.size() > i) {
+		return m_Bodies[i].ang;
+	}
+	else
+		return Vec3(0, 0, 0);
 }
 
 void RigidBodySystem::applyForceOnBody(int i, Vec3 loc, Vec3 force)
 {
-	m_Bodies[i].force += force;
-	m_Bodies[i].torque += cross(loc, force);
+	if (m_Bodies.size() > i) {
+		m_Bodies[i].force += force;
+		m_Bodies[i].torque += cross(loc, force);
+	}
 }
 
 void RigidBodySystem::addRigidBody(Vec3 position, Vec3 size, int mass)
@@ -151,19 +198,27 @@ void RigidBodySystem::addRigidBody(Vec3 position, Vec3 size, int mass)
 
 void RigidBodySystem::setOrientationOf(int i, Quat orientation)
 {
-	m_Bodies[i]. or = orientation;
+	if (m_Bodies.size() > i) 
+		m_Bodies[i]. or = orientation;
 }
 
 void RigidBodySystem::setVelocityOf(int i, Vec3 velocity)
 {
-	m_Bodies[i].lin = velocity;
+	if (m_Bodies.size() > i) 
+		m_Bodies[i].lin = velocity;
 }
 Vec3 RigidBodySystem::getSizeOfRigidBody(int i)
 {
-	return m_Bodies[i].size;
+	if (m_Bodies.size() > i)
+		return m_Bodies[i].size;
+	else
+		return Vec3(0, 0, 0);
 }
 
 Quat RigidBodySystem::getOrientation(int i)
 {
-	return m_Bodies[i]. or ;
+	if (m_Bodies.size() > i)
+		return m_Bodies[i]. or ;
+	else
+		return Quat(0, 0, 0, 0);
 }
