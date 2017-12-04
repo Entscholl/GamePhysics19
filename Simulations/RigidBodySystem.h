@@ -2,6 +2,7 @@
 #include "util\quaternion.h"
 #include "util\matrixbase.h"
 #include <vector>
+#include "collisionDetect.h"
 using namespace GamePhysics;
 class RigidBodySystem
 {
