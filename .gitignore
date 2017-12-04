@@ -13,3 +13,4 @@
 *.tlog
 *.lastbuildstate
 *.pch
+/.vs
