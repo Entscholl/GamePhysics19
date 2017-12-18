@@ -63,6 +63,7 @@ void RigidBodySystemSimulator::notifyCaseChanged(int testCase)
 
 void RigidBodySystemSimulator::externalForcesCalculations(float timeElapsed)
 {
+	/*
 	Vec3 pullforce(0, 0, 0);
 	Point2D mouseDiff;
 	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
@@ -89,11 +90,29 @@ void RigidBodySystemSimulator::externalForcesCalculations(float timeElapsed)
 		}
 	}
 	m_pRigidBodySystem->applyForceOnBody(closest, Vec3(m_trackmouse.x, m_trackmouse.y, getPositionOfRigidBody(closest).z), m_externalForce);
+	*/
+	Vec3 pullforce(0, 0, 0);
+	Point2D mouseDiff;
+	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
+	mouseDiff.y = m_trackmouse.y - m_oldtrackmouse.y;
+	if (mouseDiff.x != 0 || mouseDiff.y != 0)
+	{
+		Mat4 worldViewInv = Mat4(DUC->g_camera.GetWorldMatrix() * DUC->g_camera.GetViewMatrix());
+		worldViewInv = worldViewInv.inverse();
+		Vec3 forceView = Vec3((float)mouseDiff.x, (float)-mouseDiff.y, 0);
+		Vec3 forceWorld = worldViewInv.transformVectorNormal(forceView);
+		float forceScale = 0.2f;
+		pullforce = pullforce + (forceWorld * forceScale);
+	}
+	//pullforce -=  pullforce * 5.0f * timeElapsed;
+
+	m_externalForce = pullforce;
 }
 
 void RigidBodySystemSimulator::simulateTimestep(float timeStep)
 {
 	externalForcesCalculations(timeStep);
+	m_pRigidBodySystem->applyExternalForces(m_externalForce);
 	m_pRigidBodySystem->simulateTimestep(timeStep);
 }
 

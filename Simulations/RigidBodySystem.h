@@ -36,6 +36,7 @@ public:
 	void setVelocityOf(int i, Vec3 velocity);
 	Vec3 getSizeOfRigidBody(int i);
 	Quat getOrientation(int i);
+	void applyExternalForces(Vec3 externalForce);
 private:
 	std::vector<RigidBody> m_Bodies;
 };
